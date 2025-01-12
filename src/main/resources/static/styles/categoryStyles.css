@@ -1,0 +1,203 @@
+/* Базовые стили */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+/* Общий контейнер */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Стили для заголовков */
+h2, h3, h4 {
+    color: #4CAF50;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+h4 {
+    font-size: 1.2em;
+    margin: 15px 0;
+}
+
+/* Параграфы */
+p {
+    font-size: 1em;
+    margin: 10px 0;
+    color: #555;
+}
+
+/* Стили для кнопок */
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    flex: 1;
+    padding: 12px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:nth-child(2) {
+    background-color: #f44336;
+}
+
+button:nth-child(2):hover {
+    background-color: #e53935;
+}
+
+/* Стили формы */
+form label {
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 15px;
+    color: #333;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #333;
+    background: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    background: white;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Сообщения об ошибках */
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    margin-bottom: 10px;
+}
+
+/* Пагинация */
+.pagination ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
+}
+
+.pagination ul li {
+    margin: 0 5px;
+}
+
+.pagination ul li a,
+.pagination ul li span {
+    display: inline-block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #4CAF50;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+.pagination ul li a:hover {
+    background-color: #f0f0f0;
+}
+
+.pagination ul li.active span {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+}
+
+/* Разделители */
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+.posts a {
+    text-decoration: none;
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+.posts a:hover {
+    text-decoration: underline;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    h1, h2 {
+        font-size: 1.5em;
+    }
+
+}
+

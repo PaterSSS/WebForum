@@ -1,0 +1,479 @@
+/*!* Базовые стили *!*/
+/*body {*/
+/*    font-family: Arial, sans-serif;*/
+/*    line-height: 1.6;*/
+/*    background-color: #f9f9f9;*/
+/*    margin: 0;*/
+/*    padding: 0;*/
+/*    color: #333;*/
+/*}*/
+
+/*header {*/
+/*    background-color: #4CAF50;*/
+/*    color: white;*/
+/*    padding: 20px 0;*/
+/*    text-align: center;*/
+/*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*header h1 {*/
+/*    margin: 0;*/
+/*    font-size: 2em;*/
+/*}*/
+
+/*!* Общий контейнер *!*/
+/*.container {*/
+/*    max-width: 900px;*/
+/*    margin: 20px auto;*/
+/*    padding: 20px;*/
+/*    background: white;*/
+/*    border-radius: 8px;*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*!* Заголовки *!*/
+/*h2, h3, h4 {*/
+/*    color: #4CAF50;*/
+/*}*/
+
+/*h2 {*/
+/*    font-size: 1.8em;*/
+/*    margin-bottom: 20px;*/
+/*}*/
+
+/*h3 {*/
+/*    font-size: 1.5em;*/
+/*    margin-bottom: 10px;*/
+/*}*/
+
+/*h4 {*/
+/*    font-size: 1.2em;*/
+/*    margin: 15px 0;*/
+/*}*/
+
+/*!* Параграфы *!*/
+/*p {*/
+/*    font-size: 1em;*/
+/*    margin: 10px 0;*/
+/*    color: #555;*/
+/*}*/
+
+/*!* Кнопки *!*/
+/*.button-container {*/
+/*    margin-top: 20px;*/
+/*    display: flex;*/
+/*    gap: 10px;*/
+/*    align-items: center;*/
+/*}*/
+
+/*button {*/
+/*    padding: 12px 20px;*/
+/*    font-size: 1em;*/
+/*    font-weight: bold;*/
+/*    color: white;*/
+/*    background-color: #4CAF50;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*button:hover {*/
+/*    background-color: #45a049;*/
+/*}*/
+
+/*.menu-container {*/
+/*    position: relative;*/
+/*    display: inline-block;*/
+/*}*/
+
+/*.menu-button {*/
+/*    font-size: 1.2em;*/
+/*    background: none;*/
+/*    border: none;*/
+/*    cursor: pointer;*/
+/*    color: #333;*/
+/*}*/
+
+/*.dropdown-menu {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    right: 0;*/
+/*    background-color: white;*/
+/*    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);*/
+/*    border-radius: 5px;*/
+/*    padding: 10px 0;*/
+/*    z-index: 1000;*/
+/*}*/
+
+/*.dropdown-menu a {*/
+/*    display: block;*/
+/*    padding: 10px 20px;*/
+/*    text-decoration: none;*/
+/*    color: #333;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*.dropdown-menu a:hover {*/
+/*    background-color: #f0f0f0;*/
+/*}*/
+
+/*.menu-container:hover .dropdown-menu {*/
+/*    display: block;*/
+/*}*/
+
+/*!* Комментарии *!*/
+/*.comment {*/
+/*    margin: 20px 0;*/
+/*}*/
+
+/*.reaction-buttons {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    gap: 10px;*/
+/*    margin-top: 10px;*/
+/*}*/
+
+/*.reaction-button {*/
+/*    text-decoration: none;*/
+/*    font-size: 1.2em;*/
+/*    color: #4CAF50;*/
+/*    cursor: pointer;*/
+/*    transition: color 0.3s;*/
+/*}*/
+
+/*.reaction-button:hover {*/
+/*    color: #45a049;*/
+/*}*/
+
+/*!* Разделители *!*/
+/*hr {*/
+/*    border: 0;*/
+/*    border-top: 1px solid #ddd;*/
+/*    margin: 20px 0;*/
+/*}*/
+
+/*!* Адаптивность *!*/
+/*@media (max-width: 768px) {*/
+/*    .container {*/
+/*        padding: 15px;*/
+/*    }*/
+
+/*    button {*/
+/*        font-size: 0.9em;*/
+/*        padding: 10px;*/
+/*    }*/
+
+/*    h1, h2 {*/
+/*        font-size: 1.5em;*/
+/*    }*/
+/*}*/
+/*!* Кнопка для отображения формы *!*/
+/*#add-comment-button {*/
+/*    margin: 20px 0;*/
+/*    padding: 12px 20px;*/
+/*    font-size: 1em;*/
+/*    font-weight: bold;*/
+/*    color: white;*/
+/*    background-color: #4CAF50;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+/*}*/
+
+/*#add-comment-button:hover {*/
+/*    background-color: #45a049;*/
+/*}*/
+
+/*!* Форма добавления комментария *!*/
+/*#add-comment-form {*/
+/*    padding: 10px;*/
+/*    border: 1px solid #ddd;*/
+/*    border-radius: 8px;*/
+/*    background-color: #f9f9f9;*/
+/*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*#add-comment-form textarea {*/
+/*    width: 100%;*/
+/*    padding: 10px;*/
+/*    border-radius: 5px;*/
+/*    border: 1px solid #ccc;*/
+/*    font-size: 1em;*/
+/*    resize: none;*/
+/*}*/
+
+/*#add-comment-form button {*/
+/*    margin-top: 10px;*/
+/*    padding: 10px 20px;*/
+/*    font-size: 1em;*/
+/*    font-weight: bold;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    cursor: pointer;*/
+/*}*/
+
+/*.add-comment-form button[type="submit"] {*/
+/*    background-color: #4CAF50;*/
+/*    color: white;*/
+/*}*/
+
+/*.add-comment-form button[type="submit"]:hover {*/
+/*    background-color: #45a049;*/
+/*}*/
+
+/*.add-comment-form button[type="button"] {*/
+/*    background-color: #ddd;*/
+/*    color: #555;*/
+/*}*/
+
+/*.add-comment-form button[type="button"]:hover {*/
+/*    background-color: #ccc;*/
+/*}*/
+
+
+/* Базовые стили */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+header {
+    background-color: #4CAF50;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 2em;
+}
+
+/* Общий контейнер */
+.container {
+    max-width: 900px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовки */
+h2, h3, h4 {
+    color: #4CAF50;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+h4 {
+    font-size: 1.2em;
+    margin: 15px 0;
+}
+
+/* Параграфы */
+p {
+    font-size: 1em;
+    margin: 10px 0;
+    color: #555;
+}
+
+/* Кнопки */
+.button-container {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+button {
+    padding: 12px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+button:nth-child(2) {
+    background-color: #f44336;
+}
+
+button:nth-child(2):hover {
+    background-color: #e53935;
+}
+
+/* Меню */
+.menu-container {
+    position: relative;
+    display: inline-block;
+}
+
+.menu-button {
+    font-size: 1.2em;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #333;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 10px 0;
+    z-index: 1000;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #333;
+    transition: background-color 0.3s;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f0f0f0;
+}
+
+.menu-container:hover .dropdown-menu {
+    display: block;
+}
+
+/* Комментарии */
+.comment {
+    margin: 20px 0;
+}
+
+.reaction-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.reaction-button {
+    text-decoration: none;
+    font-size: 1.2em;
+    color: #4CAF50;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.reaction-button:hover {
+    color: #45a049;
+}
+
+/* Форма */
+form label {
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+    margin-top: 15px;
+    color: #333;
+}
+
+form input,
+form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    color: #333;
+    background: #f9f9f9;
+    transition: border-color 0.3s;
+}
+
+form input:focus,
+form textarea:focus {
+    border-color: #4CAF50;
+    outline: none;
+    background: white;
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+form button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    font-size: 1em;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+form button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+}
+
+form button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+form button[type="button"] {
+    background-color: #ddd;
+    color: #555;
+}
+
+form button[type="button"]:hover {
+    background-color: #ccc;
+}
+
+/* Разделители */
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+
+    button {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    h1, h2 {
+        font-size: 1.5em;
+    }
+}

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:if="${type.equals('login')}" th:text="'Добро пожаловать на страницу логина'"></title>
+    <title th:unless="${type.equals('login')}" th:text="'Добро пожаловать на страницу регистрации'"></title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        #errorMessage {
+            color: red;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .register-link a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("authForm");
+            const usernameField = document.getElementById("username");
+            const passwordField = document.getElementById("password");
+            const errorMessage = document.getElementById("errorMessage");
+
+            form.addEventListener("submit", (event) => {
+                errorMessage.textContent = "";
+
+                const usernameRegex = /^[a-zA-Z0-9_]+$/;
+                if (!usernameRegex.test(usernameField.value)) {
+                    event.preventDefault();
+                    errorMessage.textContent = "Имя пользователя может содержать только буквы, цифры и нижнее подчёркивание.";
+                    return;
+                }
+
+                if (!usernameRegex.test(passwordField.value)) {
+                    event.preventDefault();
+                    errorMessage.textContent = "Пароль может содержать только буквы, цифры и нижнее подчёркивание.";
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<header>
+    <h1 th:if="${type.equals('login')}" th:text="'Добро пожаловать на страницу логина'"></h1>
+    <h1 th:unless="${type.equals('login')}" th:text="'Добро пожаловать на страницу регистрации'"></h1>
+</header>
+<div class="container">
+    <div class="form-header">
+        <h1 th:if="${type.equals('login')}" th:text="'Залогиниться!'"></h1>
+        <h1 th:unless="${type.equals('login')}" th:text="'Зарегистрироваться!'"></h1>
+    </div>
+    <div>
+        <h4 th:if="${error}" th:text="${error}"></h4>
+    </div>
+    <form id="authForm" method="post" th:action="@{'/auth/' + ${type}}">
+        <div class="form-group">
+            <label for="username">Имя пользователя:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        <div id="errorMessage"></div>
+        <button type="submit" th:text="${type.equals('login') ? 'Войти': 'Зарегистрироваться'}"></button>
+    </form>
+    <div class="register-link">
+        <th:block>
+            <p><a
+                    th:href="@{/auth(type=${type.equals('login') ? 'register': 'login'})}"
+                    th:text="${type.equals('login') ? 'Зарегистрируйся здесь!' : 'Войди в свой аккаунт здесь!'}"></a></p>
+        </th:block>
+    </div>
+</div>
+</body>
+</html>

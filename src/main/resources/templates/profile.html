@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Профиль пользователя</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1, h2, h3 {
+            margin-top: 0;
+        }
+
+        .info-section {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .posts {
+            margin-top: 20px;
+        }
+
+        .posts ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .posts li {
+            margin: 10px 0;
+        }
+
+        .posts a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .posts a:hover {
+            text-decoration: underline;
+        }
+
+        .back-button {
+            margin-top: 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .back-button a {
+            text-decoration: none;
+            color: white;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .back-button a:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const editButton = document.getElementById("editButton");
+            const editForm = document.getElementById("editForm");
+
+            editButton.addEventListener("click", () => {
+                editForm.style.display = editForm.style.display === "none" ? "block" : "none";
+            });
+            editForm.addEventListener("submit", (event) => {
+                const content = document.getElementById("about")
+                const errorMessage = document.getElementById("errorMessage")
+                const sqlInjectionPattern = /('|--|;|\/\*|\*\/|xp_)/i;
+
+                if (sqlInjectionPattern.test(content.value)) {
+                    event.preventDefault(); // Отменить отправку формы
+                    errorMessage.textContent = "Введённый текст содержит недопустимые символы или конструкции!";
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+<header>
+    <h1>Профиль пользователя</h1>
+</header>
+<div class="container">
+    <div class="info-section">
+        <h2>Привет, <span th:text="${userProfile.username()}"></span></h2>
+        <p><strong>О себе:</strong> <span th:text="${(userProfile.bio() == null || userProfile.bio().isEmpty() ? 'Пока ещё нет описания' : userProfile.bio())}"></span></p>
+        <p><strong>Дата регистрации:</strong> <span th:text="${userProfile.registrationDate()}"></span></p>
+        <p><strong>Вы успели написать: </strong><span th:text="${usersPosts.size()}"></span></p>
+    </div>
+
+    <button id="editButton">Изменить информацию о себе</button>
+
+    <form id="editForm" style="display: none;" method="post" th:action="@{/profile/update}">
+        <div class="form-group">
+            <label for="about">О себе:</label>
+            <textarea id="about" name="about" rows="4" required th:text="${(userProfile.bio() == null || userProfile.bio().isEmpty() ? 'Пока ещё нет описания': userProfile.bio())}"></textarea>
+        </div>
+        <div id="errorMessage" style="color: red"></div>
+        <button type="submit">Сохранить изменения</button>
+    </form>
+
+    <div class="back-button" >
+        <a th:href="@{/}">Вернуться на главную</a>
+    </div>
+
+    <div class="posts">
+        <h3>Ваши посты:</h3>
+        <ul>
+            <li th:each="post : ${usersPosts}">
+                <a th:href="@{/post(postId=${post.postId()})}" th:text="${post.title}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

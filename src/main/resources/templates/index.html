@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добро пожаловать на мой форум!</title>
+    <link rel="stylesheet" href="/styles/forum.css">
+    <link rel="icon" href="/img/favicon-32x32.png" type="image/png">
+</head>
+<body>
+<header>
+    <h1>Добро пожаловать на веб форум!</h1>
+</header>
+<div class="container">
+    <h3 th:if="${isLogged}" th:text="'Вы вошли как ' + ${username}"></h3>
+    <div class="button-container" th:if="${isLogged}">
+        <a th:href="@{/profile}"><button>Посмотреть профиль</button></a>
+        <a th:href="@{/logout}"><button>Выйти из аккаунта</button></a>
+    </div>
+    <div class="button-container" th:unless="${isLogged}">
+        <a th:href="@{/auth(type='login')}"><button>Войти в аккаунт</button></a>
+        <a th:href="@{/auth(type='register')}"><button>Зарегистрироваться</button></a>
+    </div>
+    <div>
+        <h2>Категории</h2>
+        <hr>
+    </div>
+    <div th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+    <div th:unless="${error}">
+        <ul>
+            <li th:each="category : ${categories}">
+                <a th:href="@{/category(categoryName=${category.categoryName()})}" th:text="${category.categoryName()}"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

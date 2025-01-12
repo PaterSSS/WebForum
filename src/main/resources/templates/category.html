@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Категория ' + ${category.categoryName().toLowerCase()}"></title>
+    <link rel="stylesheet" href="/styles/categoryStyles.css">
+    <style>
+        .sort-container {
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sort-container label {
+            font-size: 1em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .sort-container select {
+            padding: 8px 12px;
+            font-size: 1em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: #333;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+
+        .sort-container select:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        .posts a {
+            text-decoration: none;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .posts a:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+</head>
+<body>
+<header>
+    <h1 th:text="'Категория: ' + ${category.categoryName()}"></h1>
+</header>
+<div class="container">
+    <div>
+        <h2 th:if="${categoryError}" th:text="'Возникла ошибка: ' + ${categoryError}" style="color: red;"></h2>
+        <h2 th:unless="${categoryError}" th:text="'Название категории: ' + ${category.categoryName()}"></h2>
+        <p th:unless="${categoryError}" th:text="'Описание категории: ' + ${category.description()}" style="color: #333333"></p>
+        <span th:unless="${categoryError}" th:text="'Количество постов в категории: ' + ${countPosts}"></span>
+        <div class="button-container">
+            <button id="openFormButton" >Написать пост</button>
+            <button onclick="location.href='/'">Вернуться на главную страницу</button>
+        </div>
+    </div>
+    <div class="sort-container">
+        <label for="sortPosts">Сортировка постов:</label>
+        <select id="sortPosts" name="sort" onchange="updateSorting(this)">
+            <option th:value="newest" th:selected="${sort == 'newest'}">От новых к старым</option>
+            <option th:value="oldest" th:selected="${sort == 'oldest'}">От старых к новым</option>
+        </select>
+    </div>
+    <hr>
+    <div id="postFormContainer" style="display: none;">
+        <h2>Создать новый пост</h2>
+        <form id="postForm" th:action="@{/post/create}" method="post">
+            <label for="title">Заголовок поста:</label>
+            <input type="text" id="title" name="title" required minlength="5" maxlength="100" placeholder="Введите заголовок">
+            <span class="error-message" id="titleError"></span>
+
+            <label for="content">Содержание поста:</label>
+            <textarea id="content" name="content" required minlength="10" maxlength="1000" placeholder="Введите содержание"></textarea>
+            <span class="error-message" id="contentError"></span>
+
+            <input type="hidden" th:value="${category.categoryName()}" id="categoryName" name="categoryName">
+            <div class="button-container">
+                <button type="submit">Сохранить</button>
+                <button type="button" id="cancelFormButton">Отмена</button>
+            </div>
+        </form>
+    </div>
+    <div>
+        <h4 th:if="${postError}" th:text="${postError}" style="color: red;"></h4>
+        <h4 th:if="${postNotFound}" th:text="'В данной категории ещё нет постов, напишите первый!!!'"></h4>
+
+        <div th:if="${posts != null}" th:each="post : ${posts}" class="posts">
+            <a th:href="@{/post(postId=${post.postId()})}"><h3 th:text="${post.title()}"></h3></a>
+            <p th:text="${post.content()}"  style="margin-left: 10px; color: #333333"></p>
+            <p th:text="'Дата создания: ' + ${post.creationDate()}" style="color: #333; font-size: 0.9em; margin-left: 10px;"></p>
+            <hr>
+        </div>
+    </div>
+
+    <div class="pagination">
+        <ul>
+            <!-- Кнопка "Назад" -->
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{/category(categoryName=${category.categoryName()}, pageNumber=${currentPage - 1})}">&laquo; Назад</a>
+            </li>
+
+            <!-- Первая страница -->
+            <li th:if="${currentPage > 2}">
+                <a th:href="@{/category(categoryName=${category.categoryName()}, pageNumber=1)}">1</a>
+            </li>
+
+            <!-- Многоточие перед текущей страницей -->
+            <li th:if="${currentPage > 3}">
+                <span>...</span>
+            </li>
+
+            <!-- Предыдущая страница -->
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{/category(categoryName=${category.categoryName()}, pageNumber=${currentPage - 1})}" th:text="${currentPage - 1}"></a>
+            </li>
+
+            <!-- Текущая страница -->
+            <li class="active">
+                <span th:text="${currentPage}"></span>
+            </li>
+
+            <!-- Следующая страница -->
+            <li th:if="${currentPage < countPages}">
+                <a th:href="@{/category(categoryName=${category.categoryName()}, pageNumber=${currentPage + 1})}" th:text="${currentPage + 1}"></a>
+            </li>
+
+            <!-- Многоточие после текущей страницы -->
+            <li th:if="${currentPage < countPages - 2}">
+                <span>...</span>
+            </li>
+
+            <!-- Последняя страница -->
+            <li th:if="${currentPage < countPages - 1}">
+                <a th:href="@{/category(categoryName=${category.categoryName()}, pageNumber=${countPages})}" th:text="${countPages}"></a>
+            </li>
+
+            <!-- Кнопка "Вперёд" -->
+            <li th:if="${currentPage < countPages}">
+                <a th:href="@{/category(categoryName=${category.categoryName()}, pageNumber=${currentPage + 1})}">Вперёд &raquo;</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+<script>
+    // JavaScript для управления формой
+    const openFormButton = document.getElementById("openFormButton");
+    const postFormContainer = document.getElementById("postFormContainer");
+    const cancelFormButton = document.getElementById("cancelFormButton");
+    const addNewPostForm = document.getElementById("postForm");
+
+    // Открыть форму
+    openFormButton.addEventListener("click", () => {
+        if (postFormContainer.style.display === "none") {
+            postFormContainer.style.display = "block";
+        } else {
+            postFormContainer.style.display = "none";
+        }
+    });
+
+    // Закрыть форму
+    cancelFormButton.addEventListener("click", () => {
+        postFormContainer.style.display = "none";
+        clearForm();
+    });
+
+    // Очистка формы
+    function clearForm() {
+        document.getElementById("title").value = "";
+        document.getElementById("content").value = "";
+        document.getElementById("titleError").textContent = "";
+        document.getElementById("contentError").textContent = "";
+    }
+
+    // Валидация формы
+    addNewPostForm.addEventListener("submit", (event) => {
+        const title = document.getElementById("title").value;
+        const content = document.getElementById("content").value;
+        const sqlInjectionPattern = /('|--|;|\/\*|\*\/|xp_)/i;
+
+        // Очистить предыдущие ошибки
+        document.getElementById("titleError").textContent = "";
+        document.getElementById("contentError").textContent = "";
+
+        if (sqlInjectionPattern.test(title)) {
+            event.preventDefault();
+            document.getElementById("titleError").textContent = "Вы ввели недопустимые символы в заголовке";
+        }
+
+        if (sqlInjectionPattern.test(content)) {
+            event.preventDefault();
+            document.getElementById("contentError").textContent = "Вы ввели недопустимые символы в содержимом";
+        }
+    });
+
+    function updateSorting(selectElement) {
+        const selectedSort = selectElement.value;
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set("sort", selectedSort); // Добавляем параметр сортировки
+
+        // Обновляем URL и отправляем запрос
+        window.location.href = `${window.location.pathname}?${urlParams.toString()}`;
+    }
+</script>
+</html>

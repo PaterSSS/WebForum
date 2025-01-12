@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="'Пост: ' + ${post.title()}"></title>
+    <style>
+        /* Базовые стили */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        /* Общий контейнер */
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Заголовки */
+        h2, h3, h4 {
+            color: #4CAF50;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        h4 {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+
+        /* Параграфы */
+        p {
+            font-size: 1em;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        /* Кнопки */
+        .button-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button:nth-child(2) {
+            background-color: #f44336;
+        }
+
+        button:nth-child(2):hover {
+            background-color: #e53935;
+        }
+
+        /* Меню */
+        .menu-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-button {
+            font-size: 1.2em;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-container:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Комментарии */
+        .comment {
+            margin: 20px 0;
+        }
+
+        .reaction-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .reaction-button {
+            text-decoration: none;
+            font-size: 1.2em;
+            color: #4CAF50;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .reaction-button:hover {
+            color: #45a049;
+        }
+
+        /* Форма */
+        form label {
+            display: block;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 15px;
+            color: #333;
+        }
+
+        form input,
+        form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 1em;
+            color: #333;
+            background: #f9f9f9;
+            transition: border-color 0.3s;
+        }
+
+        form input:focus,
+        form textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+            background: white;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        form button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        form button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        form button[type="button"] {
+            background-color: #ddd;
+            color: #555;
+        }
+
+        form button[type="button"]:hover {
+            background-color: #ccc;
+        }
+
+        #add-comment-button {
+            position: relative; /* Ставим кнопку в отдельный контекст */
+            margin-bottom: 20px; /* Добавляем отступ снизу */
+        }
+
+        #update-comment-container {
+            display: none;
+            margin-top: 40px; /* Увеличиваем отступ сверху */
+            position: relative; /* Чтобы форма не накладывалась на другие элементы */
+        }
+
+        /* Разделители */
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            button {
+                font-size: 0.9em;
+                padding: 10px;
+            }
+
+            h1, h2 {
+                font-size: 1.5em;
+            }
+        }
+
+    </style>
+
+</head>
+<body>
+<header>
+    <h1 th:text="'Пост: ' + ${post.title()}"></h1>
+</header>
+<div class="container">
+    <div>
+        <h2 th:if="${postError}" th:text="'Возникла ошибка: ' + ${postError}" style="color: red;"></h2>
+        <h2 th:unless="${postError}" id="post-title" th:text="'Заголовок поста: ' + ${post.title()}"></h2>
+        <p th:unless="${postError}" id="post-content" th:text="'Содержание: ' + ${post.content()}"
+           style="color: #333333"></p>
+        <p th:unless="${postError}" th:text="'Автор поста: ' + ${postCreator.username()}" style="color: #555"></p>
+        <p th:unless="${postError}" th:text="'Дата публикации: ' + ${post.creationDate()}" style="color: #555;"></p>
+        <div class="button-container">
+            <a th:href="@{/category(categoryName=${post.categoryName()})}">
+                <button>Вернуться на главную</button>
+            </a>
+            <div class="menu-container">
+                <button class="menu-button">⋮</button>
+                <div class="dropdown-menu">
+                    <a href="#" id="edit-button" onclick="enableEditMode()">Изменить пост</a>
+                    <a th:href="@{/post/delete(postId=${post.postId()}, categoryName=${post.categoryName()})}"
+                    >Удалить пост</a>
+                </div>
+            </div>
+
+        </div>
+        <div id="update-post-form" style="display: none; margin-top: 20px;">
+            <h2>Редактировать пост:</h2>
+            <form id="edit-post-form" th:action="@{/post/update}" method="POST">
+                <label for="edit-title">Заголовок:</label><br>
+                <input type="text" id="edit-title" name="title" th:value="${post.title()}" required><br>
+                <label for="edit-content">Содержание:</label><br>
+                <textarea id="edit-content" name="content" rows="4" cols="50" th:text="${post.content()}"
+                          required></textarea><br>
+                <div id="edit-errorMessage" style="color: red;"></div>
+                <input type="hidden" name="postId" id="postIdUpdate" th:value="${post.postId()}">
+                <button type="submit" id="save-changes">Сохранить</button>
+                <button type="button" id="cancel-edit" onclick="cancelEdit()">Отмена</button>
+            </form>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Комментарии:</h3>
+        <h4 th:if="${commentError}" th:text="'Ошибка загрузки комментариев: ' + ${commentError}"
+            style="color: red;"></h4>
+        <h4 th:if="${wholeComment == null}" th:text="'Пока нет комментариев, оставьте первый!'"></h4>
+
+        <div th:if="${wholeComment != null}" th:each="commentWithReacts : ${wholeComment}" class="comment">
+            <p th:text="'Id автора ' + ${commentWithReacts.comment().userId() + ': ' + commentWithReacts.comment().content()}"
+               style="color: #333; font-size: 1em;"></p>
+            <p th:text="'Дата: ' + ${commentWithReacts.comment().creationDate()}"
+               style="font-size: 0.9em; color: #666;"></p>
+            <div class="button-container">
+                <div class="reaction-buttons">
+                    <a th:href="@{/comment/like(commentId=${commentWithReacts.comment().id()}, postId=${post.postId()})}"
+                       class="reaction-button like">👍</a>
+                    <span th:commentIdForLikes = "${commentWithReacts.comment().id()}" id="likesCount" th:text="${commentWithReacts.likes().count()}"></span>
+                    <a th:href="@{/comment/dislike(commentId=${commentWithReacts.comment().id()}, postId=${post.postId()})}"
+                       class="reaction-button dislike">👎</a>
+                    <span th:commentIdForDislikes = "${commentWithReacts.comment().id()}" id="dislikesCount" th:text="${commentWithReacts.dislikes().count()}"></span>
+                </div>
+                <div class="menu-container">
+                    <button class="menu-button">⋮</button>
+                    <div class="dropdown-menu">
+                        <a href="#" class="edit-comment-button"
+                            th:data-comment-id="${commentWithReacts.comment().id()}"
+                            th:data-comment-content="${commentWithReacts.comment().content()}"
+                            onclick="enableEditCommentMode(event)">Изменить</a>
+                        <a th:href="@{/comment/delete(commentId=${commentWithReacts.comment().id()},
+                        postId=${commentWithReacts.comment().postId()})}"
+                        >Удалить</a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div id="update-comment-container" style="display: none; margin-top: 20px;">
+        <form id="update-comment-form" th:action="@{/comment/update}" method="POST">
+            <input type="hidden" id="commentIdUpdate" name="commentId">
+            <input type="hidden" name="postId" th:value="${post.postId()}">
+            <label for="commentContentUpdate">Содержание комментария:</label>
+            <textarea id="commentContentUpdate" name="content" rows="4" cols="50" required></textarea><br>
+            <div id="update-errorMessage" style="color: red;"></div>
+            <button type="submit">Сохранить</button>
+            <button type="button" onclick="cancelEditComment()">Отмена</button>
+        </form>
+    </div>
+    <p> </p>
+    <!-- Кнопка для отображения формы -->
+    <button id="add-comment-button">Добавить комментарий</button>
+
+    <!-- Форма для добавления комментариев -->
+    <form id="add-comment-form" th:action="@{/comment/add}" method="POST" style="display: none; margin-top: 20px;">
+        <label for="comment-content">Ваш комментарий:</label><br>
+        <textarea id="comment-content" name="content" rows="4" cols="50" required></textarea><br>
+        <input type="hidden" name="postId" id="postId" th:value="${post.postId()}">
+        <div id="errorMessage" style="color: red;"></div>
+        <button type="submit">Отправить</button>
+        <button type="button" id="cancel-button">Отмена</button>
+    </form>
+</div>
+
+<script>
+
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const addCommentButton = document.getElementById("add-comment-button");
+        const addCommentForm = document.getElementById("add-comment-form");
+        const cancelButton = document.getElementById("cancel-button");
+        const commentContent = document.getElementById("comment-content");
+
+        const editPostForm = document.getElementById("edit-post-form");
+        const editErrorMessage = document.getElementById("edit-errorMessage");
+        const editTitle = document.getElementById("edit-title");
+        const editContent = document.getElementById("edit-content");
+
+        const editCommentForm = document.getElementById("update-comment-form")
+
+        const sqlInjectionPattern = /('|--|;|\/\*|\*\/|xp_)/i;
+
+        editCommentForm.addEventListener("submit", (event) => {
+            const content = document.getElementById("commentContentUpdate")
+            const updateErrorMessage = document.getElementById("update-errorMessage")
+            if (sqlInjectionPattern.test(content.value)) {
+                event.preventDefault()
+                updateErrorMessage.textContent = "Вы ввели недопустимые симовлы!"
+            }
+        })
+
+        // Обработчик отправки формы для редактирования поста
+        editPostForm.addEventListener("submit", (event) => {
+            const title = editTitle.value;
+            const content = editContent.value;
+
+            // Валидация данных
+            if (title === "" || content === "") {
+                event.preventDefault();
+                editErrorMessage.textContent = "Все поля должны быть заполнены.";
+            }
+            if (sqlInjectionPattern.test(content)) {
+                event.preventDefault()
+                editErrorMessage.textContent = "Вы ввели недопустимые символы!"
+            }
+            if (sqlInjectionPattern.test(title)) {
+                event.preventDefault()
+                editErrorMessage.textContent = "Вы ввели недопустимые значения!"
+            }
+        });
+
+        // Показать форму по нажатию кнопки "Добавить комментарий"
+        addCommentButton.addEventListener("click", () => {
+            addCommentForm.style.display = "block";
+            addCommentButton.style.display = "none";
+        });
+
+        // Скрыть форму по нажатию кнопки "Отмена"
+        cancelButton.addEventListener("click", () => {
+            const errorMessage = document.getElementById("errorMessage")
+            addCommentForm.style.display = "none";
+            addCommentButton.style.display = "inline-block";
+            commentContent.value = ""; // Очистить текстовое поле
+            errorMessage.textContent = "";
+
+        });
+
+        // сделать валидацию данных
+        addCommentForm.addEventListener("submit", (event) => {
+            const errorMessage = document.getElementById("errorMessage");
+
+
+            if (sqlInjectionPattern.test(commentContent.value)) {
+                event.preventDefault();
+                errorMessage.textContent = "Вы ввели недопустимые символы";
+            }
+        });
+    });
+
+    function enableEditMode() {
+        const postTitle = document.getElementById("post-title");
+        const postContent = document.getElementById("post-content");
+        const editForm = document.getElementById("update-post-form");
+
+        // Переключаем на редактируемые поля
+        postTitle.style.display = "none";
+        postContent.style.display = "none";
+
+        // Показываем форму редактирования
+        editForm.style.display = "block";
+    }
+
+    // Функция для отмены редактирования
+    function cancelEdit() {
+        const postTitle = document.getElementById("post-title");
+        const postContent = document.getElementById("post-content");
+        const editForm = document.getElementById("update-post-form");
+
+        // Скрываем форму редактирования
+        editForm.style.display = "none";
+
+        // Возвращаем в исходное состояние
+        postTitle.style.display = "block";
+        postContent.style.display = "block";
+    }
+    function enableEditCommentMode(event) {
+        event.preventDefault(); // Отменяем переход по ссылке
+
+        // Получаем данные выбранного комментария
+        const button = event.target;
+        const commentId = button.getAttribute("data-comment-id");
+        const commentContent = button.getAttribute("data-comment-content");
+
+        // Находим форму редактирования и вставляем данные
+        const updateCommentContainer = document.getElementById("update-comment-container");
+        const commentIdField = document.getElementById("commentIdUpdate");
+        const commentContentField = document.getElementById("commentContentUpdate");
+
+        commentIdField.value = commentId; // Устанавливаем ID комментария
+        commentContentField.value = commentContent; // Устанавливаем текст комментария
+
+        // Показываем форму
+        updateCommentContainer.style.display = "block";
+    }
+
+    function cancelEditComment() {
+        // Скрываем форму редактирования
+        const updateCommentContainer = document.getElementById("update-comment-container");
+        updateCommentContainer.style.display = "none";
+
+        // Очищаем поля формы
+        const commentIdField = document.getElementById("commentIdUpdate");
+        const commentContentField = document.getElementById("commentContentUpdate");
+
+        commentIdField.value = "";
+        commentContentField.value = "";
+    }
+
+</script>
+</body>
+</html>
