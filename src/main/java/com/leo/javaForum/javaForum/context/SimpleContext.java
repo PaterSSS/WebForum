@@ -53,9 +53,7 @@ public final class SimpleContext implements Context {
 
     @Override
     public void putAll(Object... objects) {
-        for (Object bean : objects) {
-            regBeanWithoutClass(bean);
-        }
+        for (Object bean : objects) regBeanWithoutClass(bean);
     }
 
     private void injectLogger(Object bean) {
